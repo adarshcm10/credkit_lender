@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "382493194109",
+    "project_id": "credkit-app",
+    "storage_bucket": "credkit-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382493194109:android:675a2a9f4ff520c905fe14",
+        "android_client_info": {
+          "package_name": "com.example.credkit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDthODRd9--yA_FS8wTFotzWbZoi2U52C4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382493194109:android:fee2ce758fae1ea505fe14",
+        "android_client_info": {
+          "package_name": "com.example.credkit_lender"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDthODRd9--yA_FS8wTFotzWbZoi2U52C4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
