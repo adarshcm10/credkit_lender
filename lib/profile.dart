@@ -212,7 +212,10 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             Text(
-                              '${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).day}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).month}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).year}',
+                              (snapshot.data!.data() as Map<String, dynamic>)
+                                      .containsKey('duedate')
+                                  ? '${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).day}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).month}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).year}'
+                                  : 'No Payment to receive',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,
