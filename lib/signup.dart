@@ -328,6 +328,7 @@ class _SignUpState extends State<SignUp> {
                                   .doc(emailController.text)
                                   .set({
                                 'name': fullNameController.text,
+                                'due': 0,
                               });
 
                               //navigate to pan page

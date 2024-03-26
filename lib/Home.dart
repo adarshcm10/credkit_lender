@@ -190,7 +190,10 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            '${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).day}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).month}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).year}',
+                            (snapshot.data!.data() as Map<String, dynamic>)
+                                    .containsKey('duedate')
+                                ? '${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).day}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).month}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).year}'
+                                : 'No Payment Due',
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: Colors.white,
@@ -291,8 +294,9 @@ class _HomePageState extends State<HomePage> {
                                                 locale: 'en_IN',
                                                 symbol: '₹',
                                                 decimalDigits: 0,
-                                              ).format(int.parse(
-                                                  snapshot.data!['amount'])),
+                                              ).format(double.parse(snapshot
+                                                  .data!['amount']
+                                                  .toString())),
                                               style: const TextStyle(
                                                 color: Color(0xFFFF6900),
                                                 fontSize: 19,
@@ -481,10 +485,13 @@ class _HomePageState extends State<HomePage> {
                                                     NumberFormat.currency(
                                                       locale: 'en_IN',
                                                       symbol: '₹',
-                                                      decimalDigits: 0,
-                                                    ).format(int.parse(snapshot
-                                                            .data!.docs[index]
-                                                        ['amount'])),
+                                                      decimalDigits: 2,
+                                                    ).format(double.parse(
+                                                        snapshot
+                                                            .data!
+                                                            .docs[index]
+                                                                ['amount']
+                                                            .toString())),
                                                     style: const TextStyle(
                                                       color: Color(0xFFFF6900),
                                                       fontSize: 19,
