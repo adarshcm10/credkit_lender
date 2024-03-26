@@ -119,7 +119,7 @@ class _MyRequestsState extends State<MyRequests> {
                                   NumberFormat.currency(
                                     locale: 'en_IN',
                                     symbol: '₹',
-                                    decimalDigits: 0,
+                                    decimalDigits: 2,
                                   ).format(int.parse(
                                       snapshot.data!.docs[0]['amount'])),
                                   textAlign: TextAlign.center,

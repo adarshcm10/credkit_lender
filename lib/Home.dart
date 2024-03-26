@@ -485,7 +485,7 @@ class _HomePageState extends State<HomePage> {
                                                     NumberFormat.currency(
                                                       locale: 'en_IN',
                                                       symbol: '₹',
-                                                      decimalDigits: 2,
+                                                      decimalDigits: 0,
                                                     ).format(double.parse(
                                                         snapshot
                                                             .data!
