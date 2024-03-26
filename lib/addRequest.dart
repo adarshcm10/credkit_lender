@@ -278,9 +278,9 @@ class _AddRequestState extends State<AddRequest> {
                                 .collection('offers')
                                 .doc(email)
                                 .set({
-                              'amount': _amountController.text,
-                              'pa': _paController.text,
-                              'duration': _durationController.text,
+                              'amount': int.parse(_amountController.text),
+                              'pa': int.parse(_paController.text),
+                              'duration': int.parse(_durationController.text),
                             });
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
