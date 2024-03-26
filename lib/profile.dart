@@ -201,7 +201,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 locale: 'en_IN',
                                 symbol: '₹',
                                 decimalDigits: 0,
-                              ).format(int.parse(snapshot.data!['due'])),
+                              ).format(double.parse(
+                                  snapshot.data!['due'].toString())),
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Color(0xFFFF6900),
