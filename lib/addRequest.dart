@@ -27,21 +27,7 @@ class _AddRequestState extends State<AddRequest> {
         ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        //menubar.png for opening drawer. add things to make it work on scaffold
-        leading: Builder(
-          builder: (context) => Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: Image.asset(
-                'assets/menubar.png',
-                height: 25,
-              ),
-              // replace 'assets/menubar.png' with your image path
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
-          ),
-        ),
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SizedBox(
         width: double.infinity,

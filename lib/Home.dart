@@ -131,7 +131,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text(
-                          'Pay Due',
+                          'Earnings',
                           style: TextStyle(
                             color: Color(0xff0D1D2E),
                             fontSize: 16,
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> {
                       Padding(
                         padding: EdgeInsets.only(left: 20),
                         child: Text(
-                          'My Requests',
+                          'My Offers',
                           style: TextStyle(
                             color: Color(0xff0D1D2E),
                             fontSize: 16,

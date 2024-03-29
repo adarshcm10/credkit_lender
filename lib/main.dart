@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xff0D1D2E),
         useMaterial3: true,
+        splashColor: Colors.transparent,
       ),
       home: const AuthPage(),
     );

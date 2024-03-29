@@ -1,7 +1,9 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:credkit_lender/addRequest.dart';
 import 'package:credkit_lender/duepayment.dart';
 import 'package:credkit_lender/getstarted.dart';
+import 'package:credkit_lender/requests.dart';
 import 'package:credkit_lender/transitions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +62,185 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ],
       ),
+      drawer: Drawer(
+          child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          //container of background color 0D1D2E
+          Container(
+            color: const Color(0xff0D1D2E),
+            height: 200,
+            child: Center(child: Image.asset('assets/logo-small.png')),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Padding(
+            padding: EdgeInsets.only(
+                left: //40% of drawer width
+                    0.15 * MediaQuery.of(context).size.width),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    //pop drawer
+                    Navigator.pop(context);
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.home,
+                        color: Color(0xff0D1D2E),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Home',
+                          style: TextStyle(
+                            color: Color(0xff0D1D2E),
+                            fontSize: 16,
+                            fontFamily: 'Gotham',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+
+                //gesture detector for profile
+                GestureDetector(
+                  onTap: () {
+                    //pop drawer
+                    Navigator.pop(context);
+                    Navigator.push(context, FadeRoute(page: const DuePage()));
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.payment,
+                        color: Color(0xff0D1D2E),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Earnings',
+                          style: TextStyle(
+                            color: Color(0xff0D1D2E),
+                            fontSize: 16,
+                            fontFamily: 'Gotham',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                //gesture detector for profile
+                GestureDetector(
+                  onTap: () {
+                    //pop drawer
+                    Navigator.pop(context);
+                    FirebaseFirestore.instance
+                        .collection('requests')
+                        .doc(email)
+                        .get()
+                        .then((doc) {
+                      if (doc.exists) {
+                        Navigator.push(
+                            context, FadeRoute(page: const MyRequests()));
+                      } else {
+                        //navigfate to add request page
+                        Navigator.push(
+                            context, FadeRoute(page: const AddRequest()));
+                      }
+                    });
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.message,
+                        color: Color(0xff0D1D2E),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'My Offers',
+                          style: TextStyle(
+                            color: Color(0xff0D1D2E),
+                            fontSize: 16,
+                            fontFamily: 'Gotham',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    //pop drawer
+                    Navigator.pop(context);
+                  },
+                  child: const Row(
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Color(0xffFF6D00),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 20),
+                        child: Text(
+                          'Profile',
+                          style: TextStyle(
+                            color: Color(0xffFF6D00),
+                            fontSize: 16,
+                            fontFamily: 'Gotham',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          //add logout button at bottom
+          const Spacer(),
+          GestureDetector(
+            onTap: () {
+              //signout user
+              FirebaseAuth.instance.signOut();
+            },
+            child: Container(
+              color: const Color(0xffFF6D00),
+              height: 50,
+              child: const Center(
+                child: Text(
+                  'Logout',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontFamily: 'Gotham',
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      )),
       body: SizedBox(
         width: double.infinity,
         child: Column(

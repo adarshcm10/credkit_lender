@@ -22,19 +22,8 @@ class _DuePageState extends State<DuePage> {
         ),
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        leading: Builder(
-          builder: (context) => Padding(
-            padding: const EdgeInsets.only(left: 30),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: Image.asset(
-                'assets/menubar.png',
-                height: 25,
-              ),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
-          ),
-        ),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
       body: SizedBox(
         width: double.infinity,
