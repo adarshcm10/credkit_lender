@@ -3,6 +3,7 @@
 import 'package:credkit_lender/pan.dart';
 import 'package:credkit_lender/signin.dart';
 import 'package:credkit_lender/transitions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 //import firebase_auth
 import 'package:firebase_auth/firebase_auth.dart';
@@ -322,6 +323,9 @@ class _SignUpState extends State<SignUp> {
                                     email: emailController.text,
                                     password: passwordController.text)
                                 .then((value) async {
+                              //get device token
+                              String? deviceToken =
+                                  await FirebaseMessaging.instance.getToken();
                               //add fullname to collection 'userdata' to doc email address of user to firestore
                               await FirebaseFirestore.instance
                                   .collection('userdata')
@@ -329,11 +333,14 @@ class _SignUpState extends State<SignUp> {
                                   .set({
                                 'name': fullNameController.text,
                                 'due': 0,
+                                'token': deviceToken,
                               });
 
                               //navigate to pan page
-                              Navigator.push(
-                                  context, SlideRightRoute(page: AddPan()));
+                              Navigator.push(context,
+                                  SlideRightRoute(page: const AddPan()));
+
+                              //store token in firestore
                             }).catchError((e) {
                               //show snackbar
                               ScaffoldMessenger.of(context).showSnackBar(

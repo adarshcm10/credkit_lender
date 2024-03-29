@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:credkit_lender/home.dart';
 import 'package:credkit_lender/signup.dart';
 import 'package:credkit_lender/transitions.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 //import firebase_auth
 import 'package:firebase_auth/firebase_auth.dart';
@@ -194,7 +198,7 @@ class _SignInState extends State<SignIn> {
                 Padding(
                   padding: const EdgeInsets.only(top: 20, right: 30, left: 30),
                   child: GestureDetector(
-                    onTap: () {
+                    onTap: () async {
                       //check if any of the fields are empty
                       if (_usernameController.text.isEmpty ||
                           _passwordController.text.isEmpty) {
@@ -239,12 +243,24 @@ class _SignInState extends State<SignIn> {
                             ),
                           );
                         } else {
+                          String? deviceToken =
+                              await FirebaseMessaging.instance.getToken();
+
                           //sign in the user using firebase_auth
                           FirebaseAuth.instance
                               .signInWithEmailAndPassword(
                                   email: _usernameController.text,
                                   password: _passwordController.text)
-                              .then((value) {
+                              .then((value) async {
+                            //get deviceid for notification
+
+                            //save device token to firestore without overwriting
+                            await FirebaseFirestore.instance
+                                .collection('userdata')
+                                .doc(_usernameController.text)
+                                .set({
+                              'token': deviceToken,
+                            }, SetOptions(merge: true));
                             //navigate to home screen using fade transition
                             Navigator.pushReplacement(
                                 context, FadeRoute(page: const SpalshScreen()));
