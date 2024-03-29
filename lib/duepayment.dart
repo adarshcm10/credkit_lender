@@ -72,66 +72,85 @@ class _DuePageState extends State<DuePage> {
                   }
 
                   return Padding(
-                      padding: const EdgeInsets.only(left: 30, right: 30),
-                      child: Container(
-                        width: double.infinity,
-                        //height: 131,
-                        decoration: ShapeDecoration(
-                          shape: RoundedRectangleBorder(
-                            side: const BorderSide(
-                                width: 2, color: Color(0xFFFFDABF)),
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                    padding: const EdgeInsets.only(left: 30, right: 30),
+                    child: Container(
+                      width: double.infinity,
+                      height: 160,
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          side: const BorderSide(
+                              width: 2, color: Color(0xFFFFDABF)),
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: snapshot.data!.docs.isNotEmpty
-                            ? Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const SizedBox(
-                                    height: 30,
+                      ),
+                      child:
+                          //get due data from collection 'userdata' and document with email
+                          StreamBuilder<DocumentSnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection('userdata')
+                            .doc(email)
+                            .snapshots(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  'Upcoming',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 19,
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w300,
                                   ),
-                                  Text(
-                                    '${snapshot.data!.docs[0]['duedate'].toDate().difference(DateTime.now()).inDays} days left for the next pay of',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontFamily: 'Gotham',
-                                      fontWeight: FontWeight.w300,
-                                    ),
+                                ),
+                                Text(
+                                  NumberFormat.currency(
+                                    locale: 'en_IN',
+                                    symbol: '₹',
+                                    decimalDigits: 0,
+                                  ).format(double.parse(
+                                      snapshot.data!['due'].toString())),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Color(0xFFFF6900),
+                                    fontSize: 33,
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w700,
                                   ),
-                                  Text(
-                                    NumberFormat.currency(
-                                      locale: 'en_IN',
-                                      symbol: '₹',
-                                      decimalDigits: 0,
-                                    ).format(double.parse(snapshot
-                                        .data!.docs[0]['due']
-                                        .toString())),
-                                    textAlign: TextAlign.center,
-                                    style: const TextStyle(
-                                      color: Color(0xFFFF6900),
-                                      fontSize: 33,
-                                      fontFamily: 'Gotham',
-                                      fontWeight: FontWeight.w700,
-                                    ),
+                                ),
+                                Text(
+                                  (snapshot.data!.data()
+                                              as Map<String, dynamic>)
+                                          .containsKey('duedate')
+                                      ? '${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).day}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).month}/${DateTime.parse(snapshot.data!['duedate'].toDate().toString()).year}'
+                                      : 'No Payment is left',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontFamily: 'Gotham',
+                                    fontWeight: FontWeight.w300,
                                   ),
-                                  Text(
-                                    'On ${DateFormat('dd-MM-yyyy').format(snapshot.data!.docs[0]['duedate'].toDate())}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontFamily: 'Gotham',
-                                      fontWeight: FontWeight.w300,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 20,
-                                  )
-                                ],
-                              )
-                            : const Center(child: Text('No data')),
-                      ));
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const Text(
+                              'Loading...',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 19,
+                                fontFamily: 'Gotham',
+                                fontWeight: FontWeight.w300,
+                              ),
+                            );
+                          }
+                        },
+                      ),
+                    ),
+                  );
                 },
               ),
               const SizedBox(
