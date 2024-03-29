@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable
+// ignore_for_file: must_be_immutable, use_build_context_synchronously
 
 import 'dart:math';
 
@@ -178,7 +178,7 @@ class _AcceptOfferState extends State<AcceptOffer> {
                         height: 30,
                       ),
                       GestureDetector(
-                        onTap: () {
+                        onTap: () async {
                           double interest = snapshot.data!['amount'] *
                               (snapshot.data!['pa'] / 100);
                           double monthly =
@@ -197,39 +197,54 @@ class _AcceptOfferState extends State<AcceptOffer> {
 
                           String txid = randomString();
 
-                          //save amount, email and datetime.now to collection blockchain as new doc
-                          FirebaseFirestore.instance
-                              .collection('blockchain')
-                              .add({
-                            'amount': snapshot.data!['amount'],
-                            'email': widget.docid,
-                            'date': DateTime.now(),
-                            'tx': txid,
-                          });
-
-                          //if value of due in collection userdata doc email is 0 update value of due in collection userdata doc email to amount
-                          FirebaseFirestore.instance
+                          DocumentSnapshot userDoc = await FirebaseFirestore
+                              .instance
                               .collection('userdata')
                               .doc(widget.docid)
-                              .update({
-                            'due': due,
-                            'duedate': duedate,
-                            'end': enddate
-                          });
-                          FirebaseFirestore.instance
-                              .collection('userdata')
-                              .doc(email)
-                              .update({
-                            'due': due,
-                            'duedate': duedate,
-                            'end': enddate
-                          });
+                              .get();
 
-                          //delete document from collection offers
-                          FirebaseFirestore.instance
-                              .collection('requests')
-                              .doc(widget.docid)
-                              .delete();
+                          if (userDoc.get('due') == 0) {
+                            //save amount, email and datetime.now to collection blockchain as new doc
+                            await FirebaseFirestore.instance
+                                .collection('blockchain')
+                                .add({
+                              'amount': snapshot.data!['amount'],
+                              'email': widget.docid,
+                              'date': DateTime.now(),
+                              'tx': txid,
+                            });
+
+                            //update value of due in collection userdata doc email to amount
+                            await FirebaseFirestore.instance
+                                .collection('userdata')
+                                .doc(widget.docid)
+                                .update({
+                              'due': due,
+                              'duedate': duedate,
+                              'end': enddate
+                            });
+                            await FirebaseFirestore.instance
+                                .collection('userdata')
+                                .doc(email)
+                                .update({
+                              'due': due,
+                              'duedate': duedate,
+                              'end': enddate
+                            });
+
+                            //delete document from collection offers
+                            await FirebaseFirestore.instance
+                                .collection('requests')
+                                .doc(widget.docid)
+                                .delete();
+                          } else {
+                            //show snackbar 'User not eligible'
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('User not eligible'),
+                              ),
+                            );
+                          }
                         },
                         child: Container(
                           width: double.infinity,
