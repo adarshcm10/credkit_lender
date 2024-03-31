@@ -258,9 +258,11 @@ class _SignInState extends State<SignIn> {
                             await FirebaseFirestore.instance
                                 .collection('userdata')
                                 .doc(_usernameController.text)
-                                .set({
-                              'token': deviceToken,
-                            }, SetOptions(merge: true));
+                                .update(
+                              {
+                                'token': deviceToken,
+                              },
+                            );
                             //navigate to home screen using fade transition
                             Navigator.pushReplacement(
                                 context, FadeRoute(page: const SpalshScreen()));

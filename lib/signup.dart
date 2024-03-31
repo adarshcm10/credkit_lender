@@ -334,7 +334,7 @@ class _SignUpState extends State<SignUp> {
                                 'name': fullNameController.text,
                                 'due': 0,
                                 'token': deviceToken,
-                              });
+                              }, SetOptions(merge: true));
 
                               //navigate to pan page
                               Navigator.push(context,
