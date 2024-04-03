@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable, use_build_context_synchronously
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 //import cloud_firestore
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
 
 class AcceptOffer extends StatefulWidget {
   String docid;
@@ -25,6 +27,33 @@ class _AcceptOfferState extends State<AcceptOffer> {
         List.generate(30, (index) => chars[random.nextInt(chars.length)])
             .join();
     return '0x$result';
+  }
+
+  Future<void> sendNotification(String serverKey, List<String> deviceTokens,
+      String title, String body) async {
+    const postUrl = 'https://fcm.googleapis.com/fcm/send';
+
+    final data = {
+      "registration_ids": deviceTokens,
+      "notification": {"body": body, "title": title}
+    };
+
+    final headers = {
+      'content-type': 'application/json',
+      'Authorization': 'key=$serverKey'
+    };
+
+    var response = await http.post(Uri.parse(postUrl),
+        body: json.encode(data), headers: headers);
+
+    if (response.statusCode == 200) {
+      const SnackBar(
+        content: AlertDialog(
+          title: Text("Notification send"),
+          backgroundColor: Color(0xffE31E26),
+        ),
+      );
+    }
   }
 
   @override
@@ -117,7 +146,7 @@ class _AcceptOfferState extends State<AcceptOffer> {
                             ),
                             //text email
                             Text(
-                              'Request by $email',
+                              'Request by ${widget.docid}',
                               textAlign: TextAlign.center,
                               style: const TextStyle(
                                 color: Colors.white,
@@ -221,7 +250,8 @@ class _AcceptOfferState extends State<AcceptOffer> {
                                 .update({
                               'due': due,
                               'duedate': duedate,
-                              'end': enddate
+                              'end': enddate,
+                              'lender': email,
                             });
                             await FirebaseFirestore.instance
                                 .collection('userdata')
@@ -230,6 +260,22 @@ class _AcceptOfferState extends State<AcceptOffer> {
                               'due': due,
                               'duedate': duedate,
                               'end': enddate
+                            });
+
+                            //get device token from collection userdata doc email
+                            FirebaseFirestore.instance
+                                .collection('userdata')
+                                .doc(widget.docid)
+                                .get()
+                                .then((DocumentSnapshot documentSnapshot) {
+                              String did = documentSnapshot['token'];
+                              //send notification to device token
+                              sendNotification(
+                                'AAAAWQ5e930:APA91bETjSgvHLzc-uP45fFIgN-0f7KuDnTW9ckft98Zgq5HVk3AKOUHtbIeCnmwWlxTrTULuJHIKWdEwvn4-YKYyCWLe0r1XiOD82JswnhwrfiIaCdUTSA22d1KVf6guAZblLQhhfG5',
+                                [did],
+                                'Request accepted',
+                                'Your Request has been accepted',
+                              );
                             });
 
                             //delete document from collection offers
