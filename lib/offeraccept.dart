@@ -253,6 +253,20 @@ class _AcceptOfferState extends State<AcceptOffer> {
                               'end': enddate,
                               'lender': email,
                             });
+                            FirebaseFirestore.instance
+                                .collection('userdata')
+                                .doc(email)
+                                .get()
+                                .then(
+                                    (DocumentSnapshot documentSnapshot) async {
+                              String did = documentSnapshot['token'];
+                              await FirebaseFirestore.instance
+                                  .collection('userdata')
+                                  .doc(widget.docid)
+                                  .update({
+                                'token2': did,
+                              });
+                            });
                             await FirebaseFirestore.instance
                                 .collection('userdata')
                                 .doc(email)
